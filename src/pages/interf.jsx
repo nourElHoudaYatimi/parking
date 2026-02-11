@@ -5,14 +5,16 @@ import "./interf.css";
 
 function Interf() {
   const navigate = useNavigate();
-  const { places } = useParking();
+  const { places, reservations } = useParking();
 
-  const [selectedPlace, setSelectedPlace] = useState(null); // place cliquée → popup matricule
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   const totalPlaces = 200;
   const numbers = Array.from({ length: totalPlaces }, (_, i) => i + 1);
   const occupiedCount = Object.values(places).filter((v) => v !== null).length;
+  const reservedCount = Object.values(places).filter((v) => v !== null && v.reserved).length;
   const freeCount = totalPlaces - occupiedCount;
+  const pendingCount = reservations.filter((r) => r.status === "pending").length;
 
   const rows = [];
   for (let i = 0; i < numbers.length; i += 20) {
@@ -21,7 +23,6 @@ function Interf() {
 
   const handlePlaceClick = (num) => {
     if (places[num] !== null) {
-      // Si déjà sélectionnée, on ferme
       setSelectedPlace(selectedPlace === num ? null : num);
     }
   };
@@ -64,11 +65,24 @@ function Interf() {
               <span className="stat-label">Occupés</span>
               <span className="stat-value">{occupiedCount}</span>
             </div>
+            {reservedCount > 0 && (
+              <div className="stat-pill reserved">
+                <span className="stat-label">Réservés</span>
+                <span className="stat-value">{reservedCount}</span>
+              </div>
+            )}
           </div>
 
-          <button className="admin-button" onClick={(e) => { e.stopPropagation(); navigate("/admin"); }}>
+          {/* Bouton Réserver */}
+          <button className="reserve-button" onClick={(e) => { e.stopPropagation(); navigate("/login-client"); }}>
+            <span className="btn-icon">📅</span>
+            Réserver une place
+            {pendingCount > 0 && <span className="pending-badge">{pendingCount}</span>}
+          </button>
+
+          <button className="admin-button" onClick={(e) => { e.stopPropagation(); navigate("/login-admin"); }}>
             <span className="btn-icon">⚙</span>
-            Gestion Admin
+            Admin
           </button>
         </div>
 
@@ -95,6 +109,9 @@ function Interf() {
           <div className="legend-item">
             <span className="legend-swatch occupied" /> Occupé
           </div>
+          <div className="legend-item">
+            <span className="legend-swatch reserved-swatch" /> Réservé
+          </div>
         </div>
 
         <div className="parking-lot">
@@ -105,12 +122,13 @@ function Interf() {
                 {row.map((placeNumber) => {
                   const info = places[placeNumber];
                   const isOccupied = info !== null;
+                  const isReserved = info !== null && info.reserved === true;
                   const isSelected = selectedPlace === placeNumber;
 
                   return (
                     <div
                       key={placeNumber}
-                      className={`parking-place ${isOccupied ? "occupied" : ""} ${isSelected ? "selected" : ""}`}
+                      className={`parking-place ${isOccupied ? "occupied" : ""} ${isReserved ? "reserved" : ""} ${isSelected ? "selected" : ""}`}
                       onClick={(e) => { e.stopPropagation(); handlePlaceClick(placeNumber); }}
                       title={isOccupied ? `Place ${placeNumber} — ${info.matricule}` : `Place ${placeNumber} — Libre`}
                     >
@@ -133,8 +151,12 @@ function Interf() {
                       {isSelected && isOccupied && (
                         <div className="place-popup" onClick={(e) => e.stopPropagation()}>
                           <div className="popup-arrow" />
+                          {isReserved && <span className="popup-reserved-tag">⭐ Réservé</span>}
                           <span className="popup-label">Matricule</span>
                           <span className="popup-matricule">{info.matricule}</span>
+                          {info.client?.nom && (
+                            <span className="popup-time">👤 {info.client.nom}</span>
+                          )}
                           {info.heureEntree && (
                             <span className="popup-time">⬇ {info.heureEntree}</span>
                           )}
