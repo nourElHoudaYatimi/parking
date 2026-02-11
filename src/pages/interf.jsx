@@ -75,7 +75,6 @@ function Interf() {
 
           {/* Bouton Réserver */}
           <button className="reserve-button" onClick={(e) => { e.stopPropagation(); navigate("/login-client"); }}>
-            <span className="btn-icon">📅</span>
             Réserver une place
             {pendingCount > 0 && <span className="pending-badge">{pendingCount}</span>}
           </button>
