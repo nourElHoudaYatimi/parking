@@ -102,7 +102,7 @@ export default function LoginAdmin({ setAdminAuth }) {
                 <input
                   id="adm-email"
                   type="email"
-                  placeholder="admin@parksys.tn"
+                  placeholder=""
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   autoComplete="email"
