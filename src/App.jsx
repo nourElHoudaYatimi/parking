@@ -1,37 +1,22 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { ParkingProvider } from "./pages/ParkingContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import Interf from "./pages/Interf";
-import Admin from "./pages/Admin";
-import LoginAdmin from "./pages/LoginAdmin";
-import LoginClient from "./pages/LoginClient";
-import ReservationClient from "./pages/ReservationClient";
+function App() {
+  const [message, setMessage] = useState("");
 
-export default function App() {
-  const [adminAuth, setAdminAuth] = useState(false);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/test")
+      .then(res => res.json())
+      .then(data => setMessage(data.message))
+      .catch(err => console.log(err));
+  }, []);
 
   return (
-    <ParkingProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Interf />} />
-          <Route path="/login-client" element={<LoginClient />} />
-          <Route path="/reservation" element={<ReservationClient />} />
-          <Route
-            path="/login-admin"
-            element={<LoginAdmin setAdminAuth={setAdminAuth} />}
-          />
-          <Route
-            path="/admin"
-            element={
-              adminAuth
-                ? <Admin setAdminAuth={setAdminAuth} />
-                : <Navigate to="/login-admin" replace />
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </ParkingProvider>
+    <div>
+      <h1>Frontend React</h1>
+      <h2>{message}</h2>
+    </div>
   );
 }
+
+export default App;
+
