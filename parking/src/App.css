@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card-stat {
+  padding: 15px 25px;
+  border-radius: 10px;
+  background: #333;
+  font-weight: bold;
+}
+
+.free-stat {
+  background: #2ecc71;
+}
+
+.occupied-stat {
+  background: #e74c3c;
+}
+
+.parking-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.side {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  gap: 10px;
+}
+
+.road {
+  width: 120px;
+  height: 500px;
+  background: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  border-radius: 10px;
+}
+
+.spot {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.spot:hover {
+  transform: scale(1.1);
+}
+
+.free {
+  background-color: #2ecc71;
+}
+
+.occupied {
+  background-color: #e74c3c;
+}
